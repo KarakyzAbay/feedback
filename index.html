@@ -10,6 +10,7 @@
     .card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 30px rgba(20,40,80,0.08);max-width:600px;width:100%}
     h1{font-size:20px;margin:0 0 8px}
     label{display:block;font-size:14px;margin-bottom:6px}
+    input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6edf6;font-size:14px;margin-bottom:10px}
     .rating{display:flex;gap:8px}
     .rating input{display:none}
     .star{width:44px;height:44px;border-radius:8px;border:1px solid #e3e8f0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700}
@@ -25,11 +26,15 @@
     <form id="feedbackForm" autocomplete="off">
       <h1>Кері байланыс — Сабақтан алған әсерің?</h1>
 
+      <!-- ✅ Новое поле для имени -->
+      <label for="name">Аты-жөні:</label>
+      <input type="text" id="name" name="name" placeholder="Атыңызды жазыңыз..." required>
+
       <label>Бағалаңыз (1 — ең нашар, 5 — ең жақсы):</label>
       <div class="rating" id="rating">
         <label class="star" data-value="1">1<input type="radio" name="score" value="1"></label>
         <label class="star" data-value="2">2<input type="radio" name="score" value="2"></label>
-        <label class="star" data-value="3">3<input type="radio"name="score" value="3"></label>
+        <label class="star" data-value="3">3<input type="radio" name="score" value="3"></label>
         <label class="star" data-value="4">4<input type="radio" name="score" value="4"></label>
         <label class="star" data-value="5">5<input type="radio" name="score" value="5"></label>
       </div>
@@ -51,7 +56,7 @@
   <div class="success" id="successMsg">Сәтті орындалды!</div>
 
   <script>
-    // Rating UI
+    // Жұлдызшалармен бағалау
     const stars = document.querySelectorAll('.star');
     stars.forEach(s => s.addEventListener('click', () => {
       stars.forEach(x => x.classList.remove('selected'));
@@ -63,13 +68,20 @@
     const success = document.getElementById('successMsg');
     const statusNote = document.getElementById('statusNote');
 
-    form.addEventListener('submit', (e)=>{
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
       const data = new FormData(form);
+      const name = data.get('name')?.trim();
       const score = data.get('score');
       const thoughts = data.get('thoughts')?.trim();
 
-      if(!score){
+      // Проверка заполнения полей
+      if (!name) {
+        statusNote.textContent = 'Аты-жөніңізді жазыңыз.';
+        statusNote.style.color = '#c53030';
+        return;
+      }
+      if (!score) {
         statusNote.textContent = 'Бағалауды таңдаңыз.';
         statusNote.style.color = '#c53030';
         return;
@@ -77,17 +89,18 @@
 
       statusNote.textContent = '';
       success.style.display = 'block';
-      setTimeout(()=> success.style.display = 'none', 2500);
+      setTimeout(() => success.style.display = 'none', 2500);
 
+      // Очистка формы
       form.reset();
-      stars.forEach(x=>x.classList.remove('selected'));
+      stars.forEach(x => x.classList.remove('selected'));
 
-      console.log({score, thoughts, sentAt: new Date().toISOString()});
+      console.log({ name, score, thoughts, sentAt: new Date().toISOString() });
     });
 
-    document.getElementById('clearBtn').addEventListener('click', ()=>{
+    document.getElementById('clearBtn').addEventListener('click', () => {
       form.reset();
-      stars.forEach(x=>x.classList.remove('selected'));
+      stars.forEach(x => x.classList.remove('selected'));
       statusNote.textContent = '';
     });
   </script>
