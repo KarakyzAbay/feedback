@@ -1,3 +1,5 @@
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeK586KViv86Q_E5PH6299Sqb8gwZCtcDZb5LcnCV29d3NbqA/viewform?embedded=true" width="640" height="834" frameborder="0" marginheight="0" marginwidth="0">Загрузка…</iframe>
+сделай это с полдный кодом этим :
 <!doctype html>
 <html lang="kk">
 <head>
@@ -7,8 +9,8 @@
   <style>
     :root{font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:#111}
     body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(180deg,#f7fbff,#eef6ff);margin:0;padding:24px}
-    .card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 30px rgba(20,40,80,0.08);max-width:700px;width:100%}
-    h1{font-size:20px;margin:0 0 8px;text-align:center}
+    .card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 30px rgba(20,40,80,0.08);max-width:600px;width:100%}
+    h1{font-size:20px;margin:0 0 8px}
     label{display:block;font-size:14px;margin-bottom:6px}
     input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6edf6;font-size:14px;margin-bottom:10px}
     .rating{display:flex;gap:8px}
@@ -19,7 +21,6 @@
     button{background:#0b63e4;color:white;border:0;padding:12px 16px;border-radius:10px;font-size:15px;cursor:pointer}
     .note{font-size:13px;color:#5b6770}
     .success{position:fixed;left:50%;top:18%;transform:translateX(-50%);background:#10b981;color:white;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px rgba(16,185,129,0.18);display:none}
-    iframe{width:100%;height:830px;border:0;border-radius:10px;margin-top:20px;box-shadow:0 4px 18px rgba(0,0,0,0.05)}
   </style>
 </head>
 <body>
@@ -27,7 +28,7 @@
     <form id="feedbackForm" autocomplete="off">
       <h1>Кері байланыс — Сабақтан алған әсерің?</h1>
 
-      <!-- ✅ Поле для имени -->
+      <!-- ✅ Новое поле для имени -->
       <label for="name">Аты-жөні:</label>
       <input type="text" id="name" name="name" placeholder="Атыңызды жазыңыз..." required>
 
@@ -52,17 +53,6 @@
         <div class="note" id="statusNote"></div>
       </div>
     </form>
-
-    <!-- ✅ Встроенная Google Форма -->
-    <iframe 
-      src="https://docs.google.com/forms/d/e/1FAIpQLSeK586KViv86Q_E5PH6299Sqb8gwZCtcDZb5LcnCV29d3NbqA/viewform?embedded=true" 
-      width="640" 
-      height="834" 
-      frameborder="0" 
-      marginheight="0" 
-      marginwidth="0">
-      Загрузка…
-    </iframe>
   </div>
 
   <div class="success" id="successMsg">Сәтті орындалды!</div>
@@ -87,6 +77,7 @@
       const score = data.get('score');
       const thoughts = data.get('thoughts')?.trim();
 
+      // Проверка заполнения полей
       if (!name) {
         statusNote.textContent = 'Аты-жөніңізді жазыңыз.';
         statusNote.style.color = '#c53030';
@@ -102,6 +93,7 @@
       success.style.display = 'block';
       setTimeout(() => success.style.display = 'none', 2500);
 
+      // Очистка формы
       form.reset();
       stars.forEach(x => x.classList.remove('selected'));
 
