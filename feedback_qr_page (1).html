@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Сабақ — Кері байланыс</title>
+  <style>
+    :root{font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:#111}
+    body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(180deg,#f7fbff,#eef6ff);margin:0;padding:24px}
+    .card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 30px rgba(20,40,80,0.08);max-width:600px;width:100%}
+    h1{font-size:20px;margin:0 0 8px}
+    label{display:block;font-size:14px;margin-bottom:6px}
+    .rating{display:flex;gap:8px}
+    .rating input{display:none}
+    .star{width:44px;height:44px;border-radius:8px;border:1px solid #e3e8f0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700}
+    .star.selected{background:#2563eb;color:white;border-color:transparent}
+    textarea{width:100%;min-height:120px;padding:10px;border-radius:8px;border:1px solid #e6edf6;resize:vertical;font-size:14px}
+    button{background:#0b63e4;color:white;border:0;padding:12px 16px;border-radius:10px;font-size:15px;cursor:pointer}
+    .note{font-size:13px;color:#5b6770}
+    .success{position:fixed;left:50%;top:18%;transform:translateX(-50%);background:#10b981;color:white;padding:14px 18px;border-radius:10px;box-shadow:0 8px 30px rgba(16,185,129,0.18);display:none}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <form id="feedbackForm" autocomplete="off">
+      <h1>Кері байланыс — Сабақтан алған әсерің?</h1>
+
+      <label>Бағалаңыз (1 — ең нашар, 5 — ең жақсы):</label>
+      <div class="rating" id="rating">
+        <label class="star" data-value="1">1<input type="radio" name="score" value="1"></label>
+        <label class="star" data-value="2">2<input type="radio" name="score" value="2"></label>
+        <label class="star" data-value="3">3<input type="radio"name="score" value="3"></label>
+        <label class="star" data-value="4">4<input type="radio" name="score" value="4"></label>
+        <label class="star" data-value="5">5<input type="radio" name="score" value="5"></label>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <label for="thoughts">Сабақтан түйген ойың қандай?</label>
+      <textarea id="thoughts" name="thoughts" placeholder="Ойларыңызды мұнда жазыңыз..."></textarea>
+
+      <div style="height:12px"></div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button type="submit">Жіберу</button>
+        <button type="button" id="clearBtn" style="background:#e5eefc;color:#0b63e4">Тазалау</button>
+        <div class="note" id="statusNote"></div>
+      </div>
+    </form>
+  </div>
+
+  <div class="success" id="successMsg">Сәтті орындалды!</div>
+
+  <script>
+    // Rating UI
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(s => s.addEventListener('click', () => {
+      stars.forEach(x => x.classList.remove('selected'));
+      s.classList.add('selected');
+      s.querySelector('input').checked = true;
+    }));
+
+    const form = document.getElementById('feedbackForm');
+    const success = document.getElementById('successMsg');
+    const statusNote = document.getElementById('statusNote');
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = new FormData(form);
+      const score = data.get('score');
+      const thoughts = data.get('thoughts')?.trim();
+
+      if(!score){
+        statusNote.textContent = 'Бағалауды таңдаңыз.';
+        statusNote.style.color = '#c53030';
+        return;
+      }
+
+      statusNote.textContent = '';
+      success.style.display = 'block';
+      setTimeout(()=> success.style.display = 'none', 2500);
+
+      form.reset();
+      stars.forEach(x=>x.classList.remove('selected'));
+
+      console.log({score, thoughts, sentAt: new Date().toISOString()});
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      form.reset();
+      stars.forEach(x=>x.classList.remove('selected'));
+      statusNote.textContent = '';
+    });
+  </script>
+</body>
+</html>
